@@ -16,12 +16,15 @@ import org.elasticsearch.client.RestClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import javax.net.ssl.SSLContext;
 
 
 @Configuration
+@EnableElasticsearchRepositories(basePackages = "com.example.elasticchat.repository" )
 public class ESConfig {
 
 
@@ -63,23 +66,23 @@ public class ESConfig {
                             return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider).setSSLContext(sslContext);
                         }
                     }).setDefaultHeaders(compatibilityHeaders());
-            RestClient client = builder.build();
-            return client;
+            return builder.build();
         }catch(Exception e) {
             e.printStackTrace();
             return null;
         }
-
-
 
     }
 
 
 
     private Header[] compatibilityHeaders() {
-        return new Header[]{new BasicHeader(HttpHeaders.ACCEPT, "application/vnd.elasticsearch+json;compatible-with=7"),
-                new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/vnd.elasticsearch+json;compatible-with=7")};
+        return new Header[]{new BasicHeader(HttpHeaders.ACCEPT, "application/vnd.elasticsearch+json;compatible-with=8"),
+                new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/vnd.elasticsearch+json;compatible-with=8")};
     }
+
+
+
 
 
 
